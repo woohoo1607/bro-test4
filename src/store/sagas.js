@@ -1,7 +1,8 @@
 import { all } from "redux-saga/effects";
 import timerSaga from "../containers/TimerContainer/sagas";
 import tasksSaga from "../containers/TasksContainer/sagas";
+import taskSaga from "../containers/TaskPageContainer/sagas";
 
 export function* rootSaga() {
-  yield all([timerSaga(), tasksSaga()]);
+  yield all([timerSaga(), tasksSaga(), taskSaga()]);
 }

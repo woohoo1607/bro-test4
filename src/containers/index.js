@@ -1,5 +1,4 @@
-import HomePageContainer from './HomePageContainer/HomePageContainer';
+import HomePageContainer from "./HomePageContainer/HomePageContainer";
+import TaskPageContainer from "./TaskPageContainer/TaskPageContainer";
 
-export {
-  HomePageContainer,
-};
+export { HomePageContainer, TaskPageContainer };

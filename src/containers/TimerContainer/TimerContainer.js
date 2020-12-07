@@ -14,11 +14,23 @@ const TimerContainer = ({
   stop,
 }) => {
   const [time, setTimer] = useState(0);
+  const [name, setName] = useState(taskName);
+  const [isModal, setIsModal] = useState(false);
+
+  const closeModal = () => {
+    setIsModal(false);
+  };
+
+  const onChangeName = (e) => {
+    const value = e.target.value;
+    setName(value);
+  };
 
   useEffect(() => {
     let updateTimer;
     if (timeStart) {
       setTimer(new Date().getTime() - timeStart);
+      setName(taskName);
       updateTimer = setInterval(() => {
         setTimer((time) => time + 1000);
       }, 1000);
@@ -30,12 +42,23 @@ const TimerContainer = ({
 
   useEffect(() => {
     getTimer();
-  }, []);
+  }, [getTimer]);
+
   const changeTimerStatus = () => {
     if (timeStart) {
-      stop({ taskName, time, timeStart, timeEnd: new Date().getTime() });
+      if (name) {
+        stop({
+          taskName: name,
+          time,
+          timeStart,
+          timeEnd: new Date().getTime(),
+        });
+        setName("");
+      } else {
+        setIsModal(true);
+      }
     } else {
-      start({ timeStart: new Date().getTime(), taskName });
+      start({ timeStart: new Date().getTime(), taskName: name });
     }
   };
   return (
@@ -43,8 +66,11 @@ const TimerContainer = ({
       changeTimerStatus={changeTimerStatus}
       error={error}
       time={time}
-      taskName={taskName}
+      taskName={name}
       isLoading={isLoading}
+      onChangeName={onChangeName}
+      isModal={isModal}
+      closeModal={closeModal}
     />
   );
 };

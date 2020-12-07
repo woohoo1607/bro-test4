@@ -12,6 +12,7 @@ import {
 } from "./actionTypes";
 import { getData, removeData, setData } from "../../helpers/localStorageHelper";
 import { setIsLoading } from "./actions";
+import { GET_TASKS } from "../TasksContainer/actionTypes";
 
 export function* fetchTimerSaga() {
   try {
@@ -50,6 +51,7 @@ export function* stopTimerSaga({ payload }) {
     setData("timersData", JSON.stringify([...data, { ...payload }]));
     yield put({ type: STOP_TIMER_SUCCESS });
     yield put({ type: GET_TIMER });
+    yield put({ type: GET_TASKS });
   } catch (error) {
     yield put({ type: STOP_TIMER_ERROR, error });
   }

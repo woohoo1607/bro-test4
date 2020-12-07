@@ -1,27 +1,33 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppBar, Tab, Tabs } from "@material-ui/core";
-import { LogTable } from "../../components";
-import { getTasks } from "./actions";
+import { Chart, LogTable } from "../../components";
+import { getTasks, deleteTask } from "./actions";
 
-const TabPanel = ({ children, value, index }) => {
-  return <div>{value === index && children}</div>;
-};
-
-const TasksContainer = ({ tasks, getTasks }) => {
-  const [value, setValue] = React.useState(0);
+const TasksContainer = ({ tasks, getTasks, deleteTask }) => {
+  const [value, setValue] = useState(0);
 
   const history = useHistory();
+  const pathname = history.location.pathname;
+
+  const goToTask = (id) => () => {
+    history.push(`/task/${id}`);
+  };
+
+  const removeTask = (index) => () => {
+    const newTasks = tasks.filter((task, i) => i !== index);
+    deleteTask(newTasks);
+  };
 
   useEffect(() => {
-    if (history.location.pathname === "/charts") {
+    if (pathname === "/charts" && value !== 1) {
       setValue(1);
-    } else if (history.location.pathname === "/logs") {
+    } else if (pathname === "/logs" && value !== 0) {
       setValue(0);
     }
-  }, [history.location.pathname]);
+  }, [pathname, value]);
 
   useEffect(() => {
     getTasks();
@@ -38,17 +44,32 @@ const TasksContainer = ({ tasks, getTasks }) => {
   return (
     <div>
       <AppBar position="static">
-        <Tabs value={value} onChange={handleChange}>
-          <Tab label="Tasks Log" />
-          <Tab label="Tasks Chart" />
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          centered
+          style={{ backgroundColor: "#01bcd5" }}
+        >
+          <Tab label="Tasks Log" fullWidth={true} style={{ minWidth: "50%" }} />
+          <Tab
+            label="Tasks Chart"
+            fullWidth={true}
+            style={{ minWidth: "50%" }}
+          />
         </Tabs>
       </AppBar>
-      <LogTable tasks={tasks} index={0}>
+      <LogTable
+        tasks={tasks}
+        goToTask={goToTask}
+        removeTask={removeTask}
+        index={0}
+        value={value}
+      >
         TASKS LOG
       </LogTable>
-      <TabPanel value={value} index={1}>
+      <Chart value={value} index={1} tasks={tasks}>
         TASKS CHART
-      </TabPanel>
+      </Chart>
     </div>
   );
 };
@@ -58,6 +79,6 @@ const mapStateToProps = ({ tasks }) => ({
   isLoading: tasks.isLoading,
   tasks: tasks.tasks,
 });
-const mapDispatchToProps = { getTasks };
+const mapDispatchToProps = { getTasks, deleteTask };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TasksContainer);
