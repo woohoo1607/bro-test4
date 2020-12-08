@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 export const useStyles = makeStyles(() => ({
   title: {
     color: "#bf2b5c",
-    fontWeigth: "bold",
+    fontWeight: "bold",
   },
   text: {
     color: "#666666",

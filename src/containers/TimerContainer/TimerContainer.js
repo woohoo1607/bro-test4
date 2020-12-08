@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Timer } from "../../components";
+
+import { Progress, Timer } from "../../components";
 import { getTimer, start, stop } from "./actions";
+import { openModal } from "../ModalContainer/actions";
 
 const TimerContainer = ({
   start,
@@ -12,14 +13,10 @@ const TimerContainer = ({
   taskName,
   isLoading,
   stop,
+  openModal,
 }) => {
   const [time, setTimer] = useState(0);
   const [name, setName] = useState(taskName);
-  const [isModal, setIsModal] = useState(false);
-
-  const closeModal = () => {
-    setIsModal(false);
-  };
 
   const onChangeName = (e) => {
     const value = e.target.value;
@@ -49,29 +46,38 @@ const TimerContainer = ({
       if (name) {
         stop({
           taskName: name,
-          time,
-          timeStart,
-          timeEnd: new Date().getTime(),
+          time: +time,
+          timeStart: +timeStart,
+          timeEnd: +new Date().getTime(),
         });
         setName("");
       } else {
-        setIsModal(true);
+        const payload = {
+          title: "Empty task name",
+          msg:
+            "You are trying close your task without name, enter the title and try again!",
+          isModal: true,
+        };
+        openModal(payload);
       }
     } else {
-      start({ timeStart: new Date().getTime(), taskName: name });
+      start({ timeStart: +new Date().getTime(), taskName: name });
     }
   };
   return (
-    <Timer
-      changeTimerStatus={changeTimerStatus}
-      error={error}
-      time={time}
-      taskName={name}
-      isLoading={isLoading}
-      onChangeName={onChangeName}
-      isModal={isModal}
-      closeModal={closeModal}
-    />
+    <>
+      {isLoading && <Progress />}
+      {!isLoading && (
+        <Timer
+          changeTimerStatus={changeTimerStatus}
+          error={error}
+          time={time}
+          taskName={name}
+          isLoading={isLoading}
+          onChangeName={onChangeName}
+        />
+      )}
+    </>
   );
 };
 
@@ -82,6 +88,6 @@ const mapStateToProps = ({ timer }) => ({
   isLoading: timer.isLoading,
 });
 
-const mapDispatchToProps = { start, stop, getTimer };
+const mapDispatchToProps = { start, stop, getTimer, openModal };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TimerContainer);

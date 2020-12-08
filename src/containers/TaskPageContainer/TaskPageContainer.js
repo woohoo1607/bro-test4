@@ -1,13 +1,17 @@
 import React, { useEffect } from "react";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
-import { Task } from "../../components";
-import { getTask } from "./actions";
-import Progress from "../../components/Progress/Progress";
+import { Redirect, useHistory } from "react-router-dom";
 
-const TaskPageContainer = ({ getTask, match, task, isLoading }) => {
+import { Task, Progress } from "../../components";
+import { getTask } from "./actions";
+
+const TaskPageContainer = ({ getTask, match, task, isLoading, error }) => {
   const { id } = match.params;
+  const history = useHistory();
+
+  const goHome = () => {
+    history.push("/");
+  };
 
   useEffect(() => {
     getTask(id);
@@ -16,8 +20,8 @@ const TaskPageContainer = ({ getTask, match, task, isLoading }) => {
   return (
     <>
       {isLoading && <Progress />}
-      {!isLoading && !Object.keys(task).length && <Redirect to="/not-found" />}
-      {!isLoading && <Task task={task} />}
+      {!isLoading && <Task task={task} goHome={goHome} />}
+      {error === 404 && <Redirect to="/not-found" />}
     </>
   );
 };

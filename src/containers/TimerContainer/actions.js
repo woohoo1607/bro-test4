@@ -1,4 +1,9 @@
-import { GET_TIMER, IS_LOADING, START_TIMER, STOP_TIMER } from "./actionTypes";
+import {
+  GET_TIMER,
+  IS_LOADING_TIMER,
+  START_TIMER,
+  STOP_TIMER,
+} from "./actionTypes";
 
 export const start = (payload) => {
   return {
@@ -9,7 +14,7 @@ export const start = (payload) => {
 
 export const setIsLoading = (payload) => {
   return {
-    type: IS_LOADING,
+    type: IS_LOADING_TIMER,
     payload,
   };
 };

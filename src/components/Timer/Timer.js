@@ -3,7 +3,7 @@ import moment from "moment";
 import { TextField } from "@material-ui/core";
 
 import { useStyles } from "./styles";
-import { Modal, MyButton } from "../index";
+import { MyButton } from "../index";
 
 const Timer = ({
   changeTimerStatus,
@@ -12,13 +12,8 @@ const Timer = ({
   taskName,
   isLoading,
   onChangeName,
-  isModal,
-  closeModal,
 }) => {
   const classes = useStyles();
-  const modalTitle = "Empty task name";
-  const modalText =
-    "You are trying close your task without name, enter the title and try again!";
   return (
     <div className={classes.container}>
       <TextField
@@ -31,12 +26,6 @@ const Timer = ({
       />
       <div className={classes.timer}>{moment.utc(time).format("HH:mm:ss")}</div>
       <MyButton onClick={changeTimerStatus}>{time ? "STOP" : "START"}</MyButton>
-      <Modal
-        isOpen={isModal}
-        handleClose={closeModal}
-        title={modalTitle}
-        msg={modalText}
-      />
     </div>
   );
 };

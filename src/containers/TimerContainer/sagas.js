@@ -1,4 +1,4 @@
-import { put, takeEvery, all } from "redux-saga/effects";
+import { put, takeEvery, all, call } from "redux-saga/effects";
 import {
   GET_TIMER,
   GET_TIMER_ERROR,
@@ -16,9 +16,14 @@ import { GET_TASKS } from "../TasksContainer/actionTypes";
 
 export function* fetchTimerSaga() {
   try {
-    const timeStart = getData("timeStart") || 0;
-    const taskName = getData("taskName");
-    yield put({ type: GET_TIMER_SUCCESS, payload: { timeStart, taskName } });
+    yield put(setIsLoading(true));
+
+    const timeStart = yield call(getData, "timeStart");
+    const taskName = yield call(getData, "taskName");
+    yield put({
+      type: GET_TIMER_SUCCESS,
+      payload: { timeStart: timeStart || 0, taskName },
+    });
   } catch (error) {
     yield put({ type: GET_TIMER_ERROR, error });
   }
@@ -31,8 +36,8 @@ export function* watchFetchTimerSaga() {
 export function* startTimerSaga({ payload }) {
   try {
     yield put(setIsLoading(true));
-    setData("timeStart", payload.timeStart);
-    setData("taskName", payload.taskName);
+    yield call(setData, "timeStart", payload.timeStart);
+    yield call(setData, "taskName", payload.taskName);
     yield put({ type: START_TIMER_SUCCESS, payload });
   } catch (error) {
     yield put({ type: START_TIMER_ERROR, error });
@@ -45,10 +50,15 @@ export function* watchStartTimerSaga() {
 
 export function* stopTimerSaga({ payload }) {
   try {
-    removeData("timeStart");
-    removeData("taskName");
-    const data = JSON.parse(getData("timersData")) || [];
-    setData("timersData", JSON.stringify([...data, { ...payload }]));
+    yield call(removeData, "timeStart");
+    yield call(removeData, "taskName");
+    const result = yield call(getData, "timersData");
+    const data = JSON.parse(result) || [];
+    yield call(
+      setData,
+      "timersData",
+      JSON.stringify([...data, { ...payload }])
+    );
     yield put({ type: STOP_TIMER_SUCCESS });
     yield put({ type: GET_TIMER });
     yield put({ type: GET_TASKS });

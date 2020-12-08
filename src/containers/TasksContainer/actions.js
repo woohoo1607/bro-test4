@@ -1,4 +1,4 @@
-import { DELETE_TASK, GET_TASKS } from "./actionTypes";
+import { DELETE_TASK, GENERATE_TASKS, GET_TASKS } from "./actionTypes";
 
 export const getTasks = () => {
   return { type: GET_TASKS };
@@ -6,4 +6,8 @@ export const getTasks = () => {
 
 export const deleteTask = (data) => {
   return { type: DELETE_TASK, data };
+};
+
+export const generateTasks = () => {
+  return { type: GENERATE_TASKS };
 };

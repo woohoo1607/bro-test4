@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import PropTypes from "prop-types";
+import React from "react";
 
 import TimerContainer from "../TimerContainer/TimerContainer";
 import TasksContainer from "../TasksContainer/TasksContainer";

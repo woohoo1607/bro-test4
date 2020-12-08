@@ -1,4 +1,4 @@
-import { put, takeEvery, all } from "redux-saga/effects";
+import { put, call, takeEvery, all } from "redux-saga/effects";
 import {
   GET_TASK,
   GET_TASK_ERROR,
@@ -10,10 +10,16 @@ import { getData } from "../../helpers/localStorageHelper";
 export function* fetchTaskSaga({ id }) {
   try {
     yield put({ type: IS_LOADING, payload: true });
-    const task = JSON.parse(getData("timersData")).filter(
-      (task, i) => i == id
-    )[0];
-    yield put({ type: GET_TASK_SUCCESS, payload: { ...task } });
+    const result = yield call(getData, "timersData");
+    const task = JSON.parse(result).filter((t, i) => i === +id)[0];
+    if (task) {
+      yield put({ type: GET_TASK_SUCCESS, payload: { ...task } });
+    } else {
+      const error = {
+        error: 404,
+      };
+      yield put({ type: GET_TASK_ERROR, payload: { ...error } });
+    }
   } catch (error) {
     yield put({ type: GET_TASK_ERROR, error });
   }

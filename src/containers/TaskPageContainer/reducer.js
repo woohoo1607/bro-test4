@@ -1,4 +1,4 @@
-import { GET_TASK_SUCCESS, IS_LOADING } from "./actionTypes";
+import { GET_TASK_ERROR, GET_TASK_SUCCESS, IS_LOADING } from "./actionTypes";
 
 const initialState = {
   task: {},
@@ -12,14 +12,22 @@ const taskReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         error: "",
-        isLoading: false,
         task: { ...payload },
+        isLoading: false,
+      };
+    }
+    case GET_TASK_ERROR: {
+      return {
+        ...state,
+        error: payload.error,
+        isLoading: false,
       };
     }
     case IS_LOADING: {
       return {
         ...state,
         isLoading: payload,
+        error: "",
       };
     }
     default:

@@ -12,6 +12,7 @@ import { useStyles } from "./styles";
 
 const Modal = ({ isOpen, handleClose, title, msg }) => {
   const classes = useStyles();
+
   return (
     <Dialog
       open={isOpen}

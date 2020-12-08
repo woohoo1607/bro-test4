@@ -5,6 +5,7 @@ import { useStyles } from "./styles";
 
 const MyButton = ({ children, onClick }) => {
   const classes = useStyles();
+
   return (
     <Button variant="contained" className={classes.button} onClick={onClick}>
       {children}

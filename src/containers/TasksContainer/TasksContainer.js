@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppBar, Tab, Tabs } from "@material-ui/core";
-import { Chart, LogTable } from "../../components";
-import { getTasks, deleteTask } from "./actions";
 
-const TasksContainer = ({ tasks, getTasks, deleteTask }) => {
+import { Chart, LogTable, Progress } from "../../components";
+import { getTasks, deleteTask, generateTasks } from "./actions";
+
+const TasksContainer = ({
+  tasks,
+  getTasks,
+  deleteTask,
+  isLoading,
+  generateTasks,
+}) => {
   const [value, setValue] = useState(0);
-
   const history = useHistory();
   const pathname = history.location.pathname;
 
@@ -31,7 +36,7 @@ const TasksContainer = ({ tasks, getTasks, deleteTask }) => {
 
   useEffect(() => {
     getTasks();
-  }, []);
+  }, [getTasks]);
 
   const handleChange = (event, newValue) => {
     if (newValue === 0) {
@@ -58,18 +63,28 @@ const TasksContainer = ({ tasks, getTasks, deleteTask }) => {
           />
         </Tabs>
       </AppBar>
-      <LogTable
-        tasks={tasks}
-        goToTask={goToTask}
-        removeTask={removeTask}
-        index={0}
-        value={value}
-      >
-        TASKS LOG
-      </LogTable>
-      <Chart value={value} index={1} tasks={tasks}>
-        TASKS CHART
-      </Chart>
+      {isLoading && <Progress />}
+      {!isLoading && (
+        <>
+          <LogTable
+            tasks={tasks}
+            goToTask={goToTask}
+            removeTask={removeTask}
+            index={0}
+            value={value}
+          >
+            TASKS LOG
+          </LogTable>
+          <Chart
+            value={value}
+            index={1}
+            tasks={tasks}
+            generateTasks={generateTasks}
+          >
+            TASKS CHART
+          </Chart>
+        </>
+      )}
     </div>
   );
 };
@@ -79,6 +94,6 @@ const mapStateToProps = ({ tasks }) => ({
   isLoading: tasks.isLoading,
   tasks: tasks.tasks,
 });
-const mapDispatchToProps = { getTasks, deleteTask };
+const mapDispatchToProps = { getTasks, deleteTask, generateTasks };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TasksContainer);

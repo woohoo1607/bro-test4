@@ -1,6 +1,7 @@
 import React from "react";
-import { useStyles } from "./styles";
 import { CircularProgress } from "@material-ui/core";
+
+import { useStyles } from "./styles";
 
 const Progress = () => {
   const classes = useStyles();

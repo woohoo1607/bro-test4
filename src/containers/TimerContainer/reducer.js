@@ -1,7 +1,7 @@
 import {
   GET_TIMER_ERROR,
   GET_TIMER_SUCCESS,
-  IS_LOADING,
+  IS_LOADING_TIMER,
   START_TIMER_ERROR,
   START_TIMER_SUCCESS,
   STOP_TIMER_ERROR,
@@ -11,7 +11,7 @@ import {
 const initialState = {
   isLoading: false,
   timeStart: 0,
-  taskName: null,
+  taskName: undefined,
   error: "",
 };
 
@@ -41,10 +41,10 @@ const timerReducer = (state = initialState, { type, payload }) => {
         error: "",
         isLoading: false,
         timeStart: 0,
-        taskName: null,
+        taskName: undefined,
       };
     }
-    case IS_LOADING: {
+    case IS_LOADING_TIMER: {
       return {
         ...state,
         isLoading: payload,

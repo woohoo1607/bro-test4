@@ -8,7 +8,9 @@ import {
   TableRow,
 } from "@material-ui/core";
 import moment from "moment";
+
 import { MyButton } from "../index";
+
 import { useStyles } from "./styles";
 
 const LogTable = ({ tasks, removeTask, goToTask, value, index }) => {

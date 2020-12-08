@@ -1,9 +1,10 @@
 import moment from "moment";
 
-const minInHour = 60;
 export const transformDataForChart = (tasks) => {
+  const minInHour = 60;
   const data = [];
   const result = [];
+
   tasks.map((task) => {
     const hourStart = +moment(task.timeStart).format("H");
     const hourEnd = +moment(task.timeEnd).format("H");

@@ -4,4 +4,8 @@ export const useStyles = makeStyles(() => ({
   chartContainer: {
     marginTop: "20px",
   },
+  generateBtnContainer: {
+    textAlign: "right",
+    paddingRight: "40px",
+  },
 }));

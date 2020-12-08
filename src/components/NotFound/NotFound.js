@@ -1,6 +1,7 @@
 import React from "react";
-import { useStyles } from "./styles";
 import { Link } from "react-router-dom";
+
+import { useStyles } from "./styles";
 
 const NotFound = () => {
   const classes = useStyles();
