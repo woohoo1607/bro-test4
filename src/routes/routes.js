@@ -1,6 +1,7 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import { HomePage, TaskPage } from "../pages";
+import NotFoundPage from "../pages/NotFoundPage/NotFoundPage";
 
 const Routes = () => {
   return (
@@ -13,6 +14,7 @@ const Routes = () => {
         path="/task/:id"
         render={(props) => <TaskPage {...props} />}
       />
+      <NotFoundPage />
     </Switch>
   );
 };

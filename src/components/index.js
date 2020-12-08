@@ -4,5 +4,7 @@ import Task from "./Task/Task";
 import MyButton from "./MyButton/MyButton";
 import Modal from "./Modal/Modal";
 import Chart from "./Chart/Chart";
+import NotFound from "./NotFound/NotFound";
+import Progress from "./Progress/Progress";
 
-export { Timer, LogTable, Task, MyButton, Modal, Chart };
+export { Timer, LogTable, Task, MyButton, Modal, Chart, NotFound, Progress };
