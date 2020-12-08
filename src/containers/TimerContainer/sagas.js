@@ -22,7 +22,7 @@ export function* fetchTimerSaga() {
     const taskName = yield call(getData, "taskName");
     yield put({
       type: GET_TIMER_SUCCESS,
-      payload: { timeStart: timeStart || 0, taskName },
+      payload: { timeStart: timeStart || 0, taskName: taskName || "" },
     });
   } catch (error) {
     yield put({ type: GET_TIMER_ERROR, error });

@@ -5,14 +5,7 @@ import { TextField } from "@material-ui/core";
 import { useStyles } from "./styles";
 import { MyButton } from "../index";
 
-const Timer = ({
-  changeTimerStatus,
-  error,
-  time,
-  taskName,
-  isLoading,
-  onChangeName,
-}) => {
+const Timer = ({ changeTimerStatus, time, taskName, onChangeName }) => {
   const classes = useStyles();
   return (
     <div className={classes.container}>
