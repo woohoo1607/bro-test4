@@ -10,6 +10,7 @@ import {
 } from "./actionTypes";
 import { getData, removeData, setData } from "../../helpers/localStorageHelper";
 import { mockTasks } from "../../mocks/mockTasks";
+import { generator } from "../../helpers/transformDataForChart";
 
 export function* fetchTasksSaga() {
   try {
@@ -43,7 +44,7 @@ export function* watchDeleteTaskSaga() {
 export function* generateTasksSaga() {
   try {
     yield call(removeData, "timersData");
-    yield call(setData, "timersData", JSON.stringify(mockTasks));
+    yield call(setData, "timersData", JSON.stringify(generator()));
     yield put({ type: GET_TASKS });
   } catch (error) {}
 }
