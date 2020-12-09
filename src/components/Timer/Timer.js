@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import moment from "moment";
 import { TextField } from "@material-ui/core";
 
@@ -21,6 +22,13 @@ const Timer = ({ changeTimerStatus, time, taskName, onChangeName }) => {
       <MyButton onClick={changeTimerStatus}>{time ? "STOP" : "START"}</MyButton>
     </div>
   );
+};
+
+Timer.propTypes = {
+  changeTimerStatus: PropTypes.func,
+  time: PropTypes.number,
+  taskName: PropTypes.string,
+  onChangeName: PropTypes.func,
 };
 
 export default Timer;

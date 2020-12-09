@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import {
   Table,
   TableBody,
@@ -58,4 +59,11 @@ const LogTable = ({ tasks, removeTask, goToTask }) => {
     </TableContainer>
   );
 };
+
+LogTable.propTypes = {
+  tasks: PropTypes.array,
+  removeTask: PropTypes.func,
+  goToTask: PropTypes.func,
+};
+
 export default LogTable;

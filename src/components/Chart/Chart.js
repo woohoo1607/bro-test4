@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import PropTypes from "prop-types";
 import {
   Bar,
   BarChart,
@@ -42,6 +42,11 @@ const Chart = ({ tasks, generateTasks }) => {
       </div>
     </>
   );
+};
+
+Chart.propTypes = {
+  tasks: PropTypes.array,
+  generateTasks: PropTypes.func,
 };
 
 export default Chart;

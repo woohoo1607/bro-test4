@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import {
   Button,
   Dialog,
@@ -31,6 +32,13 @@ const Modal = ({ isOpen, handleClose, title, msg }) => {
       </DialogActions>
     </Dialog>
   );
+};
+
+Modal.propTypes = {
+  isOpen: PropTypes.bool,
+  handleClose: PropTypes.func,
+  title: PropTypes.string,
+  msg: PropTypes.string,
 };
 
 export default Modal;

@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect } from "react";
+import PropTypes from "prop-types";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useHistory } from "react-router-dom";
 
@@ -30,6 +31,10 @@ const TaskPageContainer = ({ match }) => {
       {error === 404 && <Redirect to="/not-found" />}
     </>
   );
+};
+
+TaskPageContainer.propTypes = {
+  match: PropTypes.object,
 };
 
 export default TaskPageContainer;

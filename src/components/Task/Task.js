@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import moment from "moment";
 
 import { MyButton } from "../index";
@@ -34,6 +35,11 @@ const Task = ({ task, goHome }) => {
       <MyButton onClick={goHome}>Go home</MyButton>
     </div>
   );
+};
+
+Task.propTypes = {
+  task: PropTypes.object,
+  goHome: PropTypes.func,
 };
 
 export default Task;
