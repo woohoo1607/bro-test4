@@ -26,8 +26,7 @@ const TaskPageContainer = ({ match }) => {
 
   return (
     <>
-      {isLoading && <Progress />}
-      {!isLoading && <Task task={task} goHome={goHome} />}
+      {isLoading ? <Progress /> : <Task task={task} goHome={goHome} />}
       {error === 404 && <Redirect to="/not-found" />}
     </>
   );

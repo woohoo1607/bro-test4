@@ -74,8 +74,9 @@ const TimerContainer = () => {
   };
   return (
     <>
-      {isLoading && <Progress />}
-      {!isLoading && (
+      {isLoading ? (
+        <Progress />
+      ) : (
         <Timer
           changeTimerStatus={changeTimerStatus}
           error={error}

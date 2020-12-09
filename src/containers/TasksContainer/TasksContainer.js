@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
+import { useHistory, Switch, Route } from "react-router-dom";
 import { AppBar, Tab, Tabs } from "@material-ui/core";
 
 import { Chart, LogTable, Progress } from "../../components";
@@ -19,7 +19,7 @@ const TasksContainer = () => {
     dispatch,
   ]);
 
-  const [value, setValue] = useState(0);
+  const [activeTab, setActiveTab] = useState(0);
   const history = useHistory();
   const pathname = history.location.pathname;
 
@@ -33,12 +33,12 @@ const TasksContainer = () => {
   };
 
   useEffect(() => {
-    if (pathname === "/charts" && value !== 1) {
-      setValue(1);
-    } else if (pathname === "/logs" && value !== 0) {
-      setValue(0);
+    if (pathname === "/charts" && activeTab !== 1) {
+      setActiveTab(1);
+    } else if (pathname === "/logs" && activeTab !== 0) {
+      setActiveTab(0);
     }
-  }, [pathname, value]);
+  }, [pathname, activeTab]);
 
   useEffect(() => {
     fetchTasks();
@@ -56,7 +56,7 @@ const TasksContainer = () => {
     <div>
       <AppBar position="static">
         <Tabs
-          value={value}
+          value={activeTab}
           onChange={handleChange}
           centered
           style={{ backgroundColor: "#01bcd5" }}
@@ -71,25 +71,41 @@ const TasksContainer = () => {
       </AppBar>
       {isLoading && <Progress />}
       {!isLoading && (
-        <>
-          <LogTable
-            tasks={tasks}
-            goToTask={goToTask}
-            removeTask={removeTask}
-            index={0}
-            value={value}
-          >
-            TASKS LOG
-          </LogTable>
-          <Chart
-            value={value}
-            index={1}
-            tasks={tasks}
-            generateTasks={autoGenerateTasks}
-          >
-            TASKS CHART
-          </Chart>
-        </>
+        <Switch>
+          <Route
+            exact
+            path="/logs"
+            render={(props) => (
+              <LogTable
+                tasks={tasks}
+                goToTask={goToTask}
+                removeTask={removeTask}
+                {...props}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/charts"
+            render={(props) => (
+              <Chart
+                tasks={tasks}
+                generateTasks={autoGenerateTasks}
+                {...props}
+              />
+            )}
+          />
+          <Route
+            render={(props) => (
+              <LogTable
+                tasks={tasks}
+                goToTask={goToTask}
+                removeTask={removeTask}
+                {...props}
+              />
+            )}
+          />
+        </Switch>
       )}
     </div>
   );
