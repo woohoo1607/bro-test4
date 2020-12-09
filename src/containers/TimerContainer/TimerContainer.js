@@ -1,20 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Progress, Timer } from "../../components";
 import { getTimer, start, stop } from "./actions";
 import { openModal } from "../ModalContainer/actions";
 
-const TimerContainer = ({
-  start,
-  getTimer,
-  error,
-  timeStart,
-  taskName,
-  isLoading,
-  stop,
-  openModal,
-}) => {
+const TimerContainer = () => {
+  const timeStart = useSelector((state) => state.timer.timeStart);
+  const taskName = useSelector((state) => state.timer.taskName);
+  const error = useSelector((state) => state.timer.error);
+  const isLoading = useSelector((state) => state.timer.isLoading);
+
+  const dispatch = useDispatch();
+  const fetchTimer = useCallback(() => dispatch(getTimer()), [dispatch]);
+  const startTimer = useCallback((payload) => dispatch(start(payload)), [
+    dispatch,
+  ]);
+  const stopTimer = useCallback((payload) => dispatch(stop(payload)), [
+    dispatch,
+  ]);
+  const toOpenModal = useCallback((payload) => dispatch(openModal(payload)), [
+    dispatch,
+  ]);
+
   const [time, setTimer] = useState(0);
   const [name, setName] = useState(taskName);
 
@@ -38,13 +46,13 @@ const TimerContainer = ({
   }, [timeStart]);
 
   useEffect(() => {
-    getTimer();
-  }, [getTimer]);
+    fetchTimer();
+  }, [fetchTimer]);
 
   const changeTimerStatus = () => {
     if (timeStart) {
       if (name) {
-        stop({
+        stopTimer({
           taskName: name,
           time: +time,
           timeStart: +timeStart,
@@ -58,10 +66,10 @@ const TimerContainer = ({
             "You are trying close your task without name, enter the title and try again!",
           isModal: true,
         };
-        openModal(payload);
+        toOpenModal(payload);
       }
     } else {
-      start({ timeStart: +new Date().getTime(), taskName: name });
+      startTimer({ timeStart: +new Date().getTime(), taskName: name });
     }
   };
   return (
@@ -81,13 +89,4 @@ const TimerContainer = ({
   );
 };
 
-const mapStateToProps = ({ timer }) => ({
-  error: timer.error,
-  timeStart: timer.timeStart,
-  taskName: timer.taskName,
-  isLoading: timer.isLoading,
-});
-
-const mapDispatchToProps = { start, stop, getTimer, openModal };
-
-export default connect(mapStateToProps, mapDispatchToProps)(TimerContainer);
+export default TimerContainer;

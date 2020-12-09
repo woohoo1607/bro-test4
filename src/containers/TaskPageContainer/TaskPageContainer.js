@@ -1,11 +1,18 @@
-import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import React, { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Redirect, useHistory } from "react-router-dom";
 
 import { Task, Progress } from "../../components";
 import { getTask } from "./actions";
 
-const TaskPageContainer = ({ getTask, match, task, isLoading, error }) => {
+const TaskPageContainer = ({ match }) => {
+  const task = useSelector((state) => state.task.task);
+  const error = useSelector((state) => state.task.error);
+  const isLoading = useSelector((state) => state.task.isLoading);
+
+  const dispatch = useDispatch();
+  const fetchTask = useCallback((id) => dispatch(getTask(id)), [dispatch]);
+
   const { id } = match.params;
   const history = useHistory();
 
@@ -14,8 +21,8 @@ const TaskPageContainer = ({ getTask, match, task, isLoading, error }) => {
   };
 
   useEffect(() => {
-    getTask(id);
-  }, [id, getTask]);
+    fetchTask(id);
+  }, [id, fetchTask]);
 
   return (
     <>
@@ -26,12 +33,4 @@ const TaskPageContainer = ({ getTask, match, task, isLoading, error }) => {
   );
 };
 
-const mapStateToProps = ({ task }) => ({
-  isLoading: task.isLoading,
-  task: task.task,
-  error: task.error,
-});
-
-const mapDispatchToProps = { getTask };
-
-export default connect(mapStateToProps, mapDispatchToProps)(TaskPageContainer);
+export default TaskPageContainer;

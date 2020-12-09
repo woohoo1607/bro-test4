@@ -1,18 +1,24 @@
-import React, { useEffect, useState } from "react";
-import { connect } from "react-redux";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { AppBar, Tab, Tabs } from "@material-ui/core";
 
 import { Chart, LogTable, Progress } from "../../components";
 import { getTasks, deleteTask, generateTasks } from "./actions";
 
-const TasksContainer = ({
-  tasks,
-  getTasks,
-  deleteTask,
-  isLoading,
-  generateTasks,
-}) => {
+const TasksContainer = () => {
+  const tasks = useSelector((state) => state.tasks.tasks);
+  const isLoading = useSelector((state) => state.tasks.isLoading);
+
+  const dispatch = useDispatch();
+  const fetchTasks = useCallback(() => dispatch(getTasks()), [dispatch]);
+  const taskDelete = useCallback((newTasks) => dispatch(deleteTask(newTasks)), [
+    dispatch,
+  ]);
+  const autoGenerateTasks = useCallback(() => dispatch(generateTasks()), [
+    dispatch,
+  ]);
+
   const [value, setValue] = useState(0);
   const history = useHistory();
   const pathname = history.location.pathname;
@@ -23,7 +29,7 @@ const TasksContainer = ({
 
   const removeTask = (index) => () => {
     const newTasks = tasks.filter((task, i) => i !== index);
-    deleteTask(newTasks);
+    taskDelete(newTasks);
   };
 
   useEffect(() => {
@@ -35,8 +41,8 @@ const TasksContainer = ({
   }, [pathname, value]);
 
   useEffect(() => {
-    getTasks();
-  }, [getTasks]);
+    fetchTasks();
+  }, [fetchTasks]);
 
   const handleChange = (event, newValue) => {
     if (newValue === 0) {
@@ -79,7 +85,7 @@ const TasksContainer = ({
             value={value}
             index={1}
             tasks={tasks}
-            generateTasks={generateTasks}
+            generateTasks={autoGenerateTasks}
           >
             TASKS CHART
           </Chart>
@@ -89,11 +95,4 @@ const TasksContainer = ({
   );
 };
 
-const mapStateToProps = ({ tasks }) => ({
-  error: tasks.error,
-  isLoading: tasks.isLoading,
-  tasks: tasks.tasks,
-});
-const mapDispatchToProps = { getTasks, deleteTask, generateTasks };
-
-export default connect(mapStateToProps, mapDispatchToProps)(TasksContainer);
+export default TasksContainer;
