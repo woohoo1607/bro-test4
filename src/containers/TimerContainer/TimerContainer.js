@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Progress, Timer } from "../../components";
-import { getTimer, start, stop } from "./actions";
+import { getTimer, start, stop, saveTaskName } from "./actions";
 import { openModal } from "../ModalContainer/actions";
 
 const TimerContainer = () => {
@@ -22,27 +22,31 @@ const TimerContainer = () => {
   const toOpenModal = useCallback((payload) => dispatch(openModal(payload)), [
     dispatch,
   ]);
+  const taskNameSave = useCallback(
+    (payload) => dispatch(saveTaskName(payload)),
+    [dispatch]
+  );
 
   const [time, setTimer] = useState(0);
-  const [name, setName] = useState(taskName);
 
   const onChangeName = (e) => {
     const value = e.target.value;
-    setName(value);
+    taskNameSave({ taskName: value });
   };
 
   useEffect(() => {
     let updateTimer;
     if (timeStart) {
       setTimer(new Date().getTime() - timeStart);
-      setName(taskName);
       updateTimer = setInterval(() => {
         setTimer((time) => time + 1000);
       }, 1000);
     } else {
       setTimer(timeStart);
     }
-    return () => clearInterval(updateTimer);
+    return () => {
+      clearInterval(updateTimer);
+    };
   }, [timeStart]);
 
   useEffect(() => {
@@ -51,14 +55,13 @@ const TimerContainer = () => {
 
   const changeTimerStatus = () => {
     if (timeStart) {
-      if (name) {
+      if (taskName) {
         stopTimer({
-          taskName: name,
+          taskName: taskName,
           time: +time,
           timeStart: +timeStart,
           timeEnd: +new Date().getTime(),
         });
-        setName("");
       } else {
         const payload = {
           title: "Empty task name",
@@ -69,7 +72,7 @@ const TimerContainer = () => {
         toOpenModal(payload);
       }
     } else {
-      startTimer({ timeStart: +new Date().getTime(), taskName: name });
+      startTimer({ timeStart: +new Date().getTime(), taskName: taskName });
     }
   };
   return (
@@ -81,7 +84,7 @@ const TimerContainer = () => {
           changeTimerStatus={changeTimerStatus}
           error={error}
           time={time}
-          taskName={name}
+          taskName={taskName}
           isLoading={isLoading}
           onChangeName={onChangeName}
         />

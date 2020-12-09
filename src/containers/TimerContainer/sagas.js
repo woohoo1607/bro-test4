@@ -3,6 +3,9 @@ import {
   GET_TIMER,
   GET_TIMER_ERROR,
   GET_TIMER_SUCCESS,
+  SAVE_TASK_NAME,
+  SAVE_TASK_NAME_ERROR,
+  SAVE_TASK_NAME_SUCCESS,
   START_TIMER,
   START_TIMER_ERROR,
   START_TIMER_SUCCESS,
@@ -17,7 +20,6 @@ import { GET_TASKS } from "../TasksContainer/actionTypes";
 export function* fetchTimerSaga() {
   try {
     yield put(setIsLoading(true));
-
     const timeStart = yield call(getData, "timeStart");
     const taskName = yield call(getData, "taskName");
     yield put({
@@ -48,6 +50,19 @@ export function* watchStartTimerSaga() {
   yield takeEvery(START_TIMER, startTimerSaga);
 }
 
+export function* saveTaskNameSaga({ payload }) {
+  try {
+    yield call(setData, "taskName", payload.taskName);
+    yield put({ type: SAVE_TASK_NAME_SUCCESS, payload });
+  } catch (error) {
+    yield put({ type: SAVE_TASK_NAME_ERROR, error });
+  }
+}
+
+export function* watchSaveTaskNameSaga() {
+  yield takeEvery(SAVE_TASK_NAME, saveTaskNameSaga);
+}
+
 export function* stopTimerSaga({ payload }) {
   try {
     yield call(removeData, "timeStart");
@@ -76,5 +91,6 @@ export default function* timerSaga() {
     watchFetchTimerSaga(),
     watchStartTimerSaga(),
     watchStopTimerSaga(),
+    watchSaveTaskNameSaga(),
   ]);
 }

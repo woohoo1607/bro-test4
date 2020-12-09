@@ -1,6 +1,7 @@
 import {
   GET_TIMER,
   IS_LOADING_TIMER,
+  SAVE_TASK_NAME,
   START_TIMER,
   STOP_TIMER,
 } from "./actionTypes";
@@ -28,6 +29,13 @@ export const getTimer = () => {
 export const stop = (payload) => {
   return {
     type: STOP_TIMER,
+    payload,
+  };
+};
+
+export const saveTaskName = (payload) => {
+  return {
+    type: SAVE_TASK_NAME,
     payload,
   };
 };
