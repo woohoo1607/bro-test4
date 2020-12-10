@@ -6,5 +6,16 @@ import Modal from "./Modal/Modal";
 import Chart from "./Chart/Chart";
 import NotFound from "./NotFound/NotFound";
 import Progress from "./Progress/Progress";
+import DialogModal from "./DialogModal/DialogModal";
 
-export { Timer, LogTable, Task, MyButton, Modal, Chart, NotFound, Progress };
+export {
+  Timer,
+  LogTable,
+  Task,
+  MyButton,
+  Modal,
+  Chart,
+  NotFound,
+  Progress,
+  DialogModal,
+};

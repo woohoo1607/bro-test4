@@ -9,7 +9,6 @@ import {
   IS_LOADING,
 } from "./actionTypes";
 import { getData, removeData, setData } from "../../helpers/localStorageHelper";
-import { mockTasks } from "../../mocks/mockTasks";
 import { generator } from "../../helpers/transformDataForChart";
 
 export function* fetchTasksSaga() {

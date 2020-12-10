@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useHistory, Switch, Route } from "react-router-dom";
 import { AppBar, Tab, Tabs } from "@material-ui/core";
 
-import { Chart, LogTable, Progress } from "../../components";
+import { Chart, DialogModal, LogTable, Progress } from "../../components";
 import { getTasks, deleteTask, generateTasks } from "./actions";
 
 const TasksContainer = () => {
@@ -20,6 +20,8 @@ const TasksContainer = () => {
   ]);
 
   const [activeTab, setActiveTab] = useState(0);
+  const [isModal, setIsModal] = useState(false);
+  const [idTaskForDelete, setIdTaskForDelete] = useState(undefined);
   const history = useHistory();
   const pathname = history.location.pathname;
 
@@ -27,9 +29,28 @@ const TasksContainer = () => {
     history.push(`/task/${id}`);
   };
 
+  const closeModal = () => {
+    setIsModal(false);
+  };
+
+  const successModal = () => {
+    if (idTaskForDelete !== undefined) {
+      setIdTaskForDelete(undefined);
+      const newTasks = tasks.filter((task, i) => i !== idTaskForDelete);
+      taskDelete(newTasks);
+    } else {
+      autoGenerateTasks();
+    }
+    closeModal();
+  };
+
   const removeTask = (index) => () => {
-    const newTasks = tasks.filter((task, i) => i !== index);
-    taskDelete(newTasks);
+    setIdTaskForDelete(index);
+    setIsModal(true);
+  };
+
+  const tasksGenerate = () => {
+    setIsModal(true);
   };
 
   useEffect(() => {
@@ -88,11 +109,7 @@ const TasksContainer = () => {
             exact
             path="/charts"
             render={(props) => (
-              <Chart
-                tasks={tasks}
-                generateTasks={autoGenerateTasks}
-                {...props}
-              />
+              <Chart tasks={tasks} generateTasks={tasksGenerate} {...props} />
             )}
           />
           <Route
@@ -107,6 +124,13 @@ const TasksContainer = () => {
           />
         </Switch>
       )}
+      <DialogModal
+        isOpen={isModal}
+        msg="Tasks/the task cannot be restored"
+        title="This action will delete tasks/the task"
+        close={closeModal}
+        successModal={successModal}
+      />
     </div>
   );
 };
