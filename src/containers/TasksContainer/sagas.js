@@ -9,7 +9,7 @@ import {
   IS_LOADING,
 } from "./actionTypes";
 import { getData, removeData, setData } from "../../helpers/localStorageHelper";
-import { generator } from "../../helpers/transformDataForChart";
+import { generator } from "../../helpers/tasksGenerator";
 
 export function* fetchTasksSaga() {
   try {

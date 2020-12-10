@@ -33,7 +33,8 @@ const DialogModal = ({ isOpen, title, msg, close, successModal }) => {
 
 DialogModal.propTypes = {
   isOpen: PropTypes.bool,
-  func: PropTypes.func,
+  close: PropTypes.func,
+  successModal: PropTypes.func,
   title: PropTypes.string,
   msg: PropTypes.string,
 };
